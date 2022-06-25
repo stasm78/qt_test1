@@ -12,7 +12,7 @@ struct outputHelper{
 public:
     void operator() (const QString& str) {
         Form_cpp_1::outputS(str);
-    };
+    }
 };
 
 Form_cpp_1* Form_cpp_1::form_cpp_1_ptr = nullptr;
@@ -52,7 +52,7 @@ const QString qnum(const TNumber& n)
 
 void Form_cpp_1::outputTime()
 {
-    std::time_t t = std::time(0);
+    std::time_t t = std::time(nullptr);
     struct std::tm* tmt = std::localtime(&t);
     output("");
     output("---=== "+QString("%1:%2:%3")
@@ -147,7 +147,7 @@ void Form_cpp_1::on_pushButton_2_clicked()
     output("size of i           - "+qnum(sizeof(i)));
     double d = 1.234e0;
     output("d is " + qnum(d));
-    float f{123456789.0};
+    float f{123456789.0f};
     output("f is " + qnum(static_cast<int>(f)));
     double dzero = 0.0;
     double inf = d/dzero;
@@ -245,7 +245,7 @@ void Form_cpp_1::checkObjectHeight()
 
     ui->label_fallObjectResult->setText(" h = "+QString::number(m_currentObjectHeight, 'f', 2)+" m, "+
                                         "V = "+QString::number(m_currentObjectSpeed, 'f', 2)+" m/s");
-    int currentCountSec = (m_currentObjectSpeed+0.001) / c_EarthG;
+    int currentCountSec = static_cast<int>((m_currentObjectSpeed+0.001) / c_EarthG);
 //    if( abs(static_cast<int>(m_currentObjectSpeed*1000.0) - static_cast<int>(myconsts::c_EarthG*1000.0)*countSec) < 10 ){
     if( approximatelyEqualAbsRel(m_currentObjectSpeed, c_EarthG*currentCountSec, 1e-12, 1e-8)){
         output(qnum(currentCountSec)+" s: "+" h = "+QString::number(m_currentObjectHeight, 'f', 2)+" m, "+
@@ -292,7 +292,7 @@ void Form_cpp_1::on_pushButton_5_clicked()
 
     ////////////////////
     output("---=== lesson 44 ===---");
-    for(u_int8_t i = 0; i<UINT8_MAX; ++i){
+    for(uint8_t i = 0; i<UINT8_MAX; ++i){
         output("uint: "+qnum(i)+", int: "+qnum(static_cast<int8_t>(i)));
     }
 
@@ -375,9 +375,8 @@ QString warrior_type(const Warriors& w){
         return QString("orc");
     case Warriors::WARRIOR_TROLL:
         return QString("troll");
-    default:
-        return QString("-");
     }
+    return QString("-");
 }
 
 QString warrior_type2(const Warriors& w){
@@ -392,9 +391,8 @@ QString warrior_type2(const Warriors& w){
         return QString("orc");
     case Warriors::WARRIOR_TROLL:
         return QString("troll");
-    default:
-        return QString("-");
     }
+    return QString("-");
 }
 
 }
@@ -467,9 +465,9 @@ void Form_cpp_1::on_pushButton_6_clicked()
     });
     output("---=== lesson 55 ===---");
     double d = 1.23456789123456789123456789;
-    float f = d;
-    output("double - "+QString::number(d, 'f', 30)+", float - "+QString::number(f, 'f', 20));
-    output("type of d+f is "+QString::fromLocal8Bit(typeid(d+f).name()));
+    float f = static_cast<float>(d);
+    output("double - "+QString::number(d, 'f', 30)+", float - "+QString::number(static_cast<double>(f), 'f', 20));
+    output("type of d+f is "+QString::fromLocal8Bit(typeid(d+static_cast<double>(f)).name()));
     output("type of 7+5.1 is "+QString::fromLocal8Bit(typeid(7+5.1).name()));
     output("type of 7+5 is "+QString::fromLocal8Bit(typeid(7+5).name()));
     output("hash code of i is "+qnum(typeid(12).hash_code()));
@@ -676,7 +674,7 @@ void Form_cpp_1::on_pushButton_8_clicked()
     for(int countSeconds=0; calculateHeight_TrueOnEarth(static_cast<double>(countSeconds))==false; ++countSeconds);
 #endif
     output("---=== test 02 ===---");
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
     static int countTrys{0};
     static int hideNumber{0};
     const int c_countTrys{7};
@@ -708,18 +706,18 @@ void Form_cpp_1::on_pushButton_8_clicked()
 void Form_cpp_1::on_pushButton_9_clicked()
 {
     output("---=== lesson 77 ===---");
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
     const int c_arraySize{1000000};
     //    std::array<std::pair<std::string, int>, c_arraySize> arr{};
     std::vector<std::pair<std::string, int>> arr{};
-    quint64 tBeforeInitArrayMs = QDateTime::currentMSecsSinceEpoch();
+    qint64 tBeforeInitArrayMs = QDateTime::currentMSecsSinceEpoch();
     for (size_t i=0; i<c_arraySize; ++i) {
         int randomVal = rand()%100000;
         arr.push_back({std::to_string(randomVal)+"_name", randomVal});
 //        arr[i].first = "name_"+std::to_string(i);
 //        arr[i].second = rand()%100000;
     }
-    quint64 tAfterInitArrayMs = QDateTime::currentMSecsSinceEpoch();
+    qint64 tAfterInitArrayMs = QDateTime::currentMSecsSinceEpoch();
     auto l_printArray{ [this]<typename T>(const T& arr) {
             QString s{};
             bool isBigArray = false;
@@ -736,11 +734,11 @@ void Form_cpp_1::on_pushButton_9_clicked()
             output(s);
         }};
     l_printArray(arr);
-    quint64 tBeforeSortArrayMs = QDateTime::currentMSecsSinceEpoch();
+    qint64 tBeforeSortArrayMs = QDateTime::currentMSecsSinceEpoch();
     std::sort(arr.begin(), arr.end(), [](auto& a, auto& b) -> bool {
         return a.first < b.first;
     });
-    quint64 tAfterSortArrayMs = QDateTime::currentMSecsSinceEpoch();
+    qint64 tAfterSortArrayMs = QDateTime::currentMSecsSinceEpoch();
     output("-------========= after sort ======------");
     l_printArray(arr);
     output("array size "+qnum(arr.size())+" (sizeof "+qnum(sizeof(arr))+"), init "+qnum(tAfterInitArrayMs-tBeforeInitArrayMs)+" ms, sort "+
@@ -872,12 +870,12 @@ void Form_cpp_1::on_pushButton_10_clicked()
     print96_inline(1, 2);
     output("---=== lesson101 ===---");
     auto l_max { [] (const int a, const int b) -> int { return (a>b)?a:b;}};
-    srand(time(nullptr));
+    srand(static_cast<unsigned int>(time(nullptr)));
     std::vector<int> vec101_1;
     std::vector<int> vec101_2;
     const size_t c_vectorSize{10*1000*1000};
-    quint64 tStartMs = 0;
-    quint64 tEndMs = 0;
+    qint64 tStartMs = 0;
+    qint64 tEndMs = 0;
 
     tStartMs = QDateTime::currentMSecsSinceEpoch();
     for(size_t i=0; i<c_vectorSize; ++i){
@@ -954,9 +952,8 @@ void Form_cpp_1::on_pushButton_10_clicked()
                 return l_mul;
             case mytypes::Div:
                 return l_div;
-            default:
-                return nullptr;
             }
+            return nullptr;
         }};
     auto l_getOperName{ [](const mytypes::Operators oper) -> QString {
             switch (oper) {
@@ -968,9 +965,8 @@ void Form_cpp_1::on_pushButton_10_clicked()
                 return QString(" * ");
             case mytypes::Div:
                 return QString(" / ");
-            default:
-                return QString(" n/a ");
             }
+            return QString(" n/a ");
         }};
     const int a = ui->lineEdit_numA->text().toInt();
     const int b = ui->lineEdit_numB->text().toInt();
@@ -1122,7 +1118,7 @@ public:
     public:
         static_initializer(){
             m_f = 10;
-            srand(time(nullptr));
+            srand(static_cast<unsigned int>(time(nullptr)));
             for(size_t i=0; i<10; ++i)
                 m_vec.push_back(rand()%100);
         }
@@ -1236,7 +1232,7 @@ void Form_cpp_1::on_pushButton_11_clicked()
 //    Point3D::PointType pointType = Point3D::DIFFICULT;
     std::vector<double> vec129;
     MyTimer time;
-    srand(std::time(nullptr));
+    srand(static_cast<unsigned int>(std::time(nullptr)));
     time.reset();
 
 //    qint64 tStartMs = QDateTime::currentMSecsSinceEpoch();

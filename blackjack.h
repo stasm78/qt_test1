@@ -2,6 +2,7 @@
 #define BLACKJACK_H
 
 #include <QString>
+#include <array>
 
 ////////////////////////////////////////////////////
 // Card

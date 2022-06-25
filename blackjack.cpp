@@ -1,4 +1,5 @@
 #include "blackjack.h"
+#include <ctime>
 
 ////////////////////////////////////////////////////
 // Card
@@ -139,7 +140,7 @@ void Deck::SwapCard(size_t index1, size_t index2){
     }
 
 void Deck::ShuffleDeck(){
-        srand(time(nullptr));
+        srand(static_cast<unsigned int>(time(nullptr)));
         for(int i=0;i<10;++i)
             for(size_t index=0;index<m_deck.size();++index)
                 SwapCard(index, rand()%52);
