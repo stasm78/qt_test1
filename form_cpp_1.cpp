@@ -1328,9 +1328,63 @@ void Form_cpp_1::on_pushButton_8Stop_clicked()
     ui->pushButton_8Stop->setEnabled(false);
 }
 
-void Form_cpp_1::on_pushButton_chapter9_clicked()
-{
 
+class CUAH{
+ public:
+    CUAH(double val) : m_uah(val) {
+
+    }
+    friend bool operator>(const CUAH& a, const CUAH& b) {
+        return a.m_uah>b.m_uah;
+    }
+//this is equal to above operator> (in above, 'friend' is for
+//declare non-class function(operator) and for access to private members)
+//    bool operator>(const CUAH& b) const {
+//        return m_uah>b.m_uah;
+//    }
+    operator QString() {
+        QString s(QString::number(m_uah));
+        return s;
+    }
+//    explicit operator QString() const {
+    operator QString() const {
+        QString s(QString::number(m_uah));
+        return s;
+    }
+    CUAH& operator+= (const CUAH& b) {
+        m_uah += b.m_uah;
+        return *this;
+    }
+    CUAH& operator/ (const int& b) {
+        m_uah /= b;
+        return *this;
+    }
+    friend QTextStream& operator<< (QTextStream &out, const CUAH &d) {
+        out << d.m_uah << " uah";
+        return out;
+    }
+
+ private:
+    double m_uah;
+};
+
+void Form_cpp_1::on_pushButton_chapter9_clicked() {
+    CUAH m1(3.5);
+    CUAH m2(5.67);
+    auto l_compare_and_print { [this](const CUAH& m1, const CUAH& m2) {
+            output(m1 + " uah" + (m1 > m2 ? " > " : " <= ") + m2 + " uah");
+        } };
+    output(m1 + " uah" + (m1 > m2 ? " > " : " <= ") + m2 + " uah");
+    l_compare_and_print(m1, m2);
+    m1 = 6.8;
+    output(m1 + " uah" + (m1 > m2 ? " > " : " <= ") + m2 + " uah");
+    l_compare_and_print(m1, m2);
+    m1 = 5.66;
+    QString s;
+    QTextStream ts(&s);
+    ts << m1 << (m1 > m2 ? " > " : " <= ") << m2;
+    output(s);
+    l_compare_and_print(m1, m2);
 }
 
 
